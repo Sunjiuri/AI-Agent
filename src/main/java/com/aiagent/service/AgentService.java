@@ -1,5 +1,6 @@
 package com.aiagent.service;
 
+import com.aiagent.model.ChatResult;
 import com.aiagent.tools.AgentTools;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
@@ -47,13 +48,14 @@ public class AgentService {
     }
 
     /**
-     * Sends a message to the agent and returns its reply.
+     * Sends a message to the agent and returns a {@link ChatResult} containing the
+     * resolved conversation ID and the AI-generated reply.
      *
      * @param conversationId identifies the conversation; a new ID is generated when null
      * @param userMessage    the user's input
-     * @return a two-element array: {@code [resolvedConversationId, replyText]}
+     * @return the chat result with conversation ID and reply text
      */
-    public String[] chat(String conversationId, String userMessage) {
+    public ChatResult chat(String conversationId, String userMessage) {
         String resolvedId = (conversationId != null && !conversationId.isBlank())
                 ? conversationId
                 : UUID.randomUUID().toString();
@@ -64,7 +66,7 @@ public class AgentService {
                 .call()
                 .content();
 
-        return new String[]{resolvedId, reply};
+        return new ChatResult(resolvedId, reply);
     }
 
     /**

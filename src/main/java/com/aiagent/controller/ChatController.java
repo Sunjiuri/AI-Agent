@@ -2,6 +2,7 @@ package com.aiagent.controller;
 
 import com.aiagent.model.ChatRequest;
 import com.aiagent.model.ChatResponse;
+import com.aiagent.model.ChatResult;
 import com.aiagent.service.AgentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +40,8 @@ public class ChatController {
         if (request.message() == null || request.message().isBlank()) {
             return ResponseEntity.badRequest().build();
         }
-        String[] result = agentService.chat(request.conversationId(), request.message());
-        return ResponseEntity.ok(new ChatResponse(result[0], result[1]));
+        ChatResult result = agentService.chat(request.conversationId(), request.message());
+        return ResponseEntity.ok(new ChatResponse(result.conversationId(), result.reply()));
     }
 
     /**

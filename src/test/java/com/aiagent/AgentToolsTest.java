@@ -22,8 +22,8 @@ class AgentToolsTest {
     void currentDateTime_returnsNonBlankString() {
         String result = tools.currentDateTime();
         assertThat(result).isNotBlank();
-        // format is yyyy-MM-dd HH:mm:ss  →  19 characters
-        assertThat(result).hasSize(19);
+        // format is yyyy-MM-dd HH:mm:ss  →  always 19 characters (HH uses zero-padded 2-digit hour)
+        assertThat(result).matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}");
     }
 
     // -----------------------------------------------------------------------
@@ -35,8 +35,8 @@ class AgentToolsTest {
         AgentTools.WeatherResponse response = tools.getWeather("Beijing");
 
         assertThat(response.city()).isEqualTo("Beijing");
-        assertThat(response.condition()).isNotBlank();
-        assertThat(response.temperatureCelsius()).isGreaterThan(-100);
+        assertThat(response.condition()).isEqualTo("Sunny");
+        assertThat(response.temperatureCelsius()).isEqualTo(22);
     }
 
     // -----------------------------------------------------------------------
